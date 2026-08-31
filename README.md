@@ -1,3 +1,198 @@
+# Конспект: Структура проекта Laravel (Blade)
+
+
+## 1. ОБЩАЯ СТРУКТУРА
+
+laravel-project/
+
+├── app/           // Ядро приложения (код)
+
+├── bootstrap/     // Автозагрузка и стартовая загрузка
+
+├── config/        // Все конфигурационные файлы
+
+├── database/      // Миграции, сиды, фабрики
+
+├── public/        // Корневая папка для веб-сервера
+
+├── resources/     // Blade-шаблоны, ассеты, языковые файлы
+
+├── routes/        // Определение всех маршрутов
+
+├── storage/       // Логи, кэш, загруженные файлы
+
+├── tests/         // Автотесты
+
+├── vendor/        // Зависимости Composer
+
+├── .env           // Настройки окружения
+
+├── artisan        // CLI-инструмент
+
+└── composer.json  // PHP-зависимости
+
+
+
+## 2. КЛЮЧЕВЫЕ ДИРЕКТОРИИ
+
+app/ — код приложения
+
+├── Http/
+
+│   ├── Controllers/   // Обработка запросов
+
+│   ├── Middleware/    // Фильтры HTTP-запросов
+
+│   └── Requests/      // Валидация форм
+
+├── Models/            // Eloquent-модели для БД
+
+└── Providers/         // Регистрация сервисов
+
+
+Controller обычно:
+получает запрос;
+вызывает нужную бизнес-логику;
+получает данные;
+передаёт данные в представление;
+возвращает ответ.
+
+resources/ — представления
+
+├── views/             // Blade-шаблоны (.blade.php)
+
+│   ├── layouts/       // Базовые макеты страниц
+
+│   ├── components/    // Переиспользуемые x-компоненты
+
+│   ├── partials/      // Частичные фрагменты
+
+│   └── pages/         // Цельные страницы
+
+├── css/               // Стили (через Vite)
+
+├── js/                // Скрипты (через Vite)
+
+└── lang/              // Языковые строки
+
+Здесь находятся ресурсы, которые используются для создания интерфейса.
+
+
+routes/ — маршрутизация
+
+├── web.php            // Веб-маршруты (CSRF, сессии)
+
+└── console.php        // Artisan-команды
+
+config/ — настройки
+
+├── app.php            // Основные параметры
+
+├── database.php       // Подключения БД
+
+├── auth.php           // Аутентификация
+
+├── cache.php          // Кэширование
+
+├── mail.php           // SMTP-настройки
+
+├── queue.php          // Очереди
+
+└── filesystems.php    // Диски хранения
+
+database/ — БД
+
+├── migrations/        // Структура таблиц
+
+├── seeders/           // Начальные данные
+
+└── factories/         // Тестовые данные
+
+
+
+## Вся цепочка Laravel + Blade
+
+                 Laravel
+                    │
+                    ▼
+             routes/web.php
+                    │
+                    ▼
+               Middleware
+                    │
+                    ▼
+                Controller
+                    │
+                    ▼
+                  Model
+                    │
+                    ▼
+                Database
+                    │
+                    ▼
+                  Model
+                    │
+                    ▼
+               Controller
+                    │
+                    ▼
+              Blade View
+                    │
+                    ▼
+                  HTML
+                    │
+                    ▼
+                Browser       
+
+
+## MVC = Model + View + Controller
+
+                 БРАУЗЕР
+                    │
+                    │ GET /users
+                    ▼
+             routes/web.php
+                    │
+                    ▼
+          UserController@index
+                    │
+                    │
+             ┌──────┴──────┐
+             │             │
+             ▼             │
+          User Model       │
+             │             │
+             ▼             │
+          Database         │
+             │             │
+             │ users       │
+             │             │
+             └──────┬──────┘
+                    │
+                    │ данные
+                    ▼
+             UserController
+                    │
+                    ▼
+          users/index.blade.php
+                    │
+                    ▼
+                  HTML
+                    │
+                    ▼
+                 БРАУЗЕР     
+
+Laravel:
+получает HTTP-запрос;
+смотрит маршрут в routes/web.php;
+запускает middleware;
+вызывает Controller;
+Controller может обратиться к Model;
+Model получает данные из БД;
+Controller передаёт данные в Blade;
+Blade генерирует HTML;
+Laravel отправляет HTML браузеру.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

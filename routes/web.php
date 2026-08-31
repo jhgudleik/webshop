@@ -1,8 +1,17 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    dd('Hello, World!');
+Route::get('/test', function () {
+    $users = User::all()->toArray();
+    dd($users);
     return view('welcome');
 });
+
+/*
+ Route::get('/', function () {
+    dd('Hello, World!');
+    return view('welcome');
+ });
+*/
