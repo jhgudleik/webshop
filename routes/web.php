@@ -10,17 +10,27 @@ Route::get('/test', function () {
     return view('welcome');
 });
 
- Route::get('/', function () {
+Route::get('/', function () {
     dd('Hello, World!');
     return view('welcome');
  });
 
+/* 
 Route::get('/products', function () {
     $products = Product::all()->toArray();
     dd($products);
-    return view('welcome');
+    return view('welcome'));
+});
+*/
+// Передача данных с бекенда на фронтенд в шаблонизатор blade (в представление products.index).
+
+Route::get('/products', function () {
+    $products = Product::all();
+
+    return view('products.index', compact('products'));
 });
 
+// Добавление продуктов в базу данных через маршрут
 /*
 Route::get('/add-products', function () {
 

@@ -193,6 +193,30 @@ Controller передаёт данные в Blade;
 Blade генерирует HTML;
 Laravel отправляет HTML браузеру.
 
+** Передача данных с бекенда на фронтенд в шаблонизатор Blade (в представление products.index).
+
+*** routes/web.php
+
+```php
+Route::get('/products', function () {
+    $products = Product::all();
+
+    return view('products.index', compact('products'));
+});
+```
+
+resources/views/products/index.blade.php
+```php
+<h1>Products</h1>
+
+@foreach ($products as $product)
+    <h2>{{ $product->name }}</h2>
+    <p>{{ $product->description }}</p>
+    <p>Цена: {{ $product->price }}</p>
+    <p>Остаток: {{ $product->stock }}</p>
+@endforeach
+```
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
