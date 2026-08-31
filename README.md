@@ -193,9 +193,9 @@ Controller передаёт данные в Blade;
 Blade генерирует HTML;
 Laravel отправляет HTML браузеру.
 
-** Передача данных с бекенда на фронтенд в шаблонизатор Blade (в представление products.index).
+## Передача данных с бекенда на фронтенд в шаблонизатор Blade (в представление products.index).
 
-*** routes/web.php
+### routes/web.php
 
 ```php
 Route::get('/products', function () {
@@ -205,7 +205,7 @@ Route::get('/products', function () {
 });
 ```
 
-resources/views/products/index.blade.php
+### resources/views/products/index.blade.php
 ```php
 <h1>Products</h1>
 
