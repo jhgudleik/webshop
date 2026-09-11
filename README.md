@@ -1,3 +1,810 @@
+# CRUD категорий в Laravel
+
+CRUD — это 4 основные операции над данными:
+
+| CRUD           | Действие  | HTTP            | В нашем проекте             |
+| -------------- | --------- | --------------- | --------------------------- |
+| **C — Create** | создать   | GET + POST      | создать категорию           |
+| **R — Read**   | прочитать | GET             | список / просмотр категории |
+| **U — Update** | изменить  | GET + PUT/PATCH | редактировать категорию     |
+| **D — Delete** | удалить   | DELETE          | удалить категорию           |
+
+---
+
+# 1. Общая схема
+
+В нашем проекте запрос проходит примерно так:
+
+```text
+Браузер
+   ↓
+routes/web.php
+   ↓
+CategoryController
+   ↓
+FormRequest
+   ↓
+Category Model
+   ↓
+Database
+   ↓
+Controller
+   ↓
+Blade View
+   ↓
+Браузер
+```
+
+Например:
+
+```text
+GET /admin/categories
+        ↓
+CategoryController@index()
+        ↓
+Category::query()
+        ↓
+categories table
+        ↓
+index.blade.php
+```
+
+---
+
+# 2. Model — описание категории
+
+Файл:
+
+```text
+app/Models/Category.php
+```
+
+Модель представляет таблицу `categories`.
+
+Основные поля:
+
+```php
+parent_id
+slug
+title
+active
+```
+
+Запись в базе:
+
+```text
+id:        1
+parent_id: null
+slug:      electronics
+title:     Электроника
+active:    true
+```
+
+## Связи
+
+### Родительская категория
+
+```php
+public function parent(): BelongsTo
+{
+    return $this->belongsTo(Category::class, 'parent_id', 'id');
+}
+```
+
+То есть:
+
+```text
+Телефоны
+   ↓ parent_id
+Электроника
+```
+
+### Дочерние категории
+
+```php
+public function children(): HasMany
+{
+    return $this->hasMany(Category::class, 'parent_id', 'id');
+}
+```
+
+Например:
+
+```text
+Электроника
+├── Телефоны
+├── Ноутбуки
+└── Телевизоры
+```
+
+---
+
+# 3. Routes — какие URL существуют
+
+Файл:
+
+```text
+routes/web.php
+```
+
+Мы используем:
+
+```php
+Route::prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::resource('categories', CategoryController::class);
+    });
+```
+
+`Route::resource()` автоматически создаёт 7 маршрутов:
+
+```text
+GET       /admin/categories
+POST      /admin/categories
+GET       /admin/categories/create
+GET       /admin/categories/{category}
+PUT/PATCH /admin/categories/{category}
+DELETE    /admin/categories/{category}
+GET       /admin/categories/{category}/edit
+```
+
+Они связываются с методами контроллера:
+
+```text
+index   → список
+create  → форма создания
+store   → сохранение
+show    → просмотр
+edit    → форма редактирования
+update  → обновление
+destroy → удаление
+```
+
+---
+
+# 4. READ — список категорий
+
+URL:
+
+```text
+GET /admin/categories
+```
+
+Вызывается:
+
+```php
+public function index(): View
+{
+    $categories = Category::query()
+        ->with('parent')
+        ->orderBy('title')
+        ->paginate(20);
+
+    return view(
+        'admin.categories.index',
+        compact('categories')
+    );
+}
+```
+
+Что происходит:
+
+```text
+GET /admin/categories
+        ↓
+index()
+        ↓
+Category::query()
+        ↓
+SELECT ... FROM categories
+        ↓
+$categories
+        ↓
+admin/categories/index.blade.php
+```
+
+В Blade:
+
+```blade
+@foreach($categories as $category)
+    {{ $category->title }}
+@endforeach
+```
+
+---
+
+# 5. CREATE — открыть форму
+
+URL:
+
+```text
+GET /admin/categories/create
+```
+
+Вызывается:
+
+```php
+public function create(): View
+{
+    $categories = Category::query()
+        ->orderBy('title')
+        ->get();
+
+    return view(
+        'admin.categories.create',
+        compact('categories')
+    );
+}
+```
+
+Здесь база ещё **не изменяется**.
+
+Мы просто получаем список категорий, чтобы показать его в `<select>`:
+
+```text
+Родительская категория:
+[ Электроника       ▼ ]
+```
+
+---
+
+# 6. CREATE — отправить форму
+
+Форма делает:
+
+```text
+POST /admin/categories
+```
+
+Например:
+
+```text
+title = Телефоны
+slug = phones
+parent_id = 1
+active = 1
+```
+
+Запрос попадает в:
+
+```php
+store(StoreCategoryRequest $request)
+```
+
+Сначала работает `StoreCategoryRequest`.
+
+Он проверяет:
+
+```php
+'title' => ['required', 'string', 'max:255'],
+'slug' => ['required', 'string', 'max:100', 'unique:categories,slug'],
+'parent_id' => ['nullable', 'exists:categories,id'],
+```
+
+Если данные неправильные:
+
+```text
+Form
+ ↓
+Validation
+ ↓
+ошибка
+ ↓
+обратно на форму
+```
+
+Если правильные:
+
+```text
+Form
+ ↓
+Validation OK
+ ↓
+Controller
+```
+
+Контроллер:
+
+```php
+Category::create($request->validated());
+```
+
+Здесь происходит INSERT:
+
+```text
+INSERT INTO categories (...)
+```
+
+После этого:
+
+```php
+return redirect()
+    ->route('admin.categories.index')
+    ->with('success', 'Категория успешно создана.');
+```
+
+Пользователь возвращается к списку.
+
+---
+
+# 7. FormRequest — зачем он нужен
+
+У нас два класса:
+
+```text
+app/Http/Requests/Admin/StoreCategoryRequest.php
+app/Http/Requests/Admin/UpdateCategoryRequest.php
+```
+
+Их задача:
+
+```text
+проверить входные данные
+```
+
+Например:
+
+```php
+'slug' => [
+    'required',
+    'string',
+    'max:100',
+    'unique:categories,slug',
+],
+```
+
+То есть Controller не должен заниматься всей проверкой самостоятельно.
+
+Получается:
+
+```text
+Request
+   ↓
+FormRequest
+   ↓
+validated()
+   ↓
+Controller
+```
+
+Контроллер получает уже проверенные данные:
+
+```php
+$request->validated()
+```
+
+---
+
+# 8. UPDATE — открыть форму редактирования
+
+URL:
+
+```text
+GET /admin/categories/1/edit
+```
+
+Laravel видит:
+
+```text
+{category}
+```
+
+и благодаря **Route Model Binding** автоматически получает:
+
+```php
+Category $category
+```
+
+То есть вместо:
+
+```php
+$id = 1;
+
+$category = Category::findOrFail($id);
+```
+
+Laravel сам делает это за нас.
+
+Метод:
+
+```php
+public function edit(Category $category): View
+```
+
+Дальше передаём категорию в Blade:
+
+```php
+return view(
+    'admin.categories.edit',
+    compact('category', 'categories')
+);
+```
+
+---
+
+# 9. UPDATE — сохранить изменения
+
+Форма отправляет:
+
+```text
+PUT /admin/categories/1
+```
+
+или:
+
+```text
+PATCH /admin/categories/1
+```
+
+Laravel вызывает:
+
+```php
+update(
+    UpdateCategoryRequest $request,
+    Category $category
+)
+```
+
+Проверяется `UpdateCategoryRequest`.
+
+Затем:
+
+```php
+$category->update($request->validated());
+```
+
+В базе происходит примерно:
+
+```sql
+UPDATE categories
+SET
+    title = ...,
+    slug = ...,
+    parent_id = ...,
+    active = ...
+WHERE id = 1;
+```
+
+После этого:
+
+```php
+return redirect()
+    ->route('admin.categories.index')
+    ->with('success', 'Категория успешно обновлена.');
+```
+
+---
+
+# 10. DELETE — удалить категорию
+
+Форма отправляет:
+
+```text
+DELETE /admin/categories/1
+```
+
+Laravel вызывает:
+
+```php
+destroy(Category $category)
+```
+
+И:
+
+```php
+$category->delete();
+```
+
+Происходит:
+
+```sql
+DELETE FROM categories
+WHERE id = 1;
+```
+
+После удаления:
+
+```php
+return redirect()
+    ->route('admin.categories.index');
+```
+
+---
+
+# 11. SHOW — просмотр одной категории
+
+URL:
+
+```text
+GET /admin/categories/1
+```
+
+Метод:
+
+```php
+public function show(Category $category): View
+{
+    $category->load([
+        'parent',
+        'children',
+        'products',
+    ]);
+
+    return view(
+        'admin.categories.show',
+        compact('category')
+    );
+}
+```
+
+Здесь можно получить:
+
+```php
+$category->parent
+$category->children
+$category->products
+```
+
+Например:
+
+```text
+Электроника
+
+Дочерние категории:
+- Телефоны
+- Ноутбуки
+- Телевизоры
+```
+
+---
+
+# 12. Blade — отображение HTML
+
+Наши представления:
+
+```text
+resources/views/admin/categories/
+
+index.blade.php
+create.blade.php
+edit.blade.php
+show.blade.php
+```
+
+Они отвечают только за интерфейс.
+
+Например:
+
+```blade
+{{ $category->title }}
+```
+
+выводит название.
+
+А:
+
+```blade
+<form method="POST" action="...">
+```
+
+отправляет данные обратно в Laravel.
+
+---
+
+# 13. Layout
+
+Все страницы категорий используют:
+
+```blade
+@extends('layouts.main')
+```
+
+То есть:
+
+```text
+layouts/main.blade.php
+        ↓
+@extends
+        ↓
+@yield('content')
+        ↑
+index/create/edit/show
+```
+
+В category Blade:
+
+```blade
+@section('content')
+
+    ...
+
+@endsection
+```
+
+Этот HTML вставляется сюда:
+
+```blade
+<main class="main-content">
+    <div class="container py-4">
+        @yield('content')
+    </div>
+</main>
+```
+
+---
+
+# 14. $parentCategories
+
+`main.blade.php` использует:
+
+```blade
+@foreach($parentCategories as $parentCategory)
+```
+
+Поэтому мы добавили View Composer в:
+
+```text
+app/Providers/AppServiceProvider.php
+```
+
+Он делает:
+
+```php
+View::composer('layouts.main', function ($view) {
+    ...
+});
+```
+
+Получается:
+
+```text
+Любая страница
+      ↓
+layouts.main
+      ↓
+AppServiceProvider
+      ↓
+получаем parentCategories
+      ↓
+layouts.main
+```
+
+Это удобно, потому что не нужно писать в каждом контроллере:
+
+```php
+$parentCategories = ...
+```
+
+---
+
+# 15. Полная схема CRUD
+
+## CREATE
+
+```text
+GET /admin/categories/create
+        ↓
+create()
+        ↓
+create.blade.php
+        ↓
+POST /admin/categories
+        ↓
+StoreCategoryRequest
+        ↓
+store()
+        ↓
+Category::create()
+        ↓
+Database INSERT
+```
+
+## READ
+
+```text
+GET /admin/categories
+        ↓
+index()
+        ↓
+Category::query()
+        ↓
+Database SELECT
+        ↓
+index.blade.php
+```
+
+## UPDATE
+
+```text
+GET /admin/categories/1/edit
+        ↓
+edit()
+        ↓
+edit.blade.php
+        ↓
+PUT /admin/categories/1
+        ↓
+UpdateCategoryRequest
+        ↓
+update()
+        ↓
+$category->update()
+        ↓
+Database UPDATE
+```
+
+## DELETE
+
+```text
+DELETE /admin/categories/1
+        ↓
+destroy()
+        ↓
+$category->delete()
+        ↓
+Database DELETE
+```
+
+---
+
+# 16. Что за что отвечает
+
+Запомнить можно так:
+
+```text
+Route
+  ↓
+КУДА отправить запрос?
+
+Controller
+  ↓
+ЧТО сделать?
+
+FormRequest
+  ↓
+МОЖНО ли принять эти данные?
+
+Model
+  ↓
+КАК работать с базой?
+
+Migration
+  ↓
+КАКАЯ структура таблицы?
+
+Blade
+  ↓
+ЧТО показать пользователю?
+
+View Composer
+  ↓
+КАКИЕ общие данные передать layout?
+```
+
+И самое главное:
+
+```text
+Browser
+   ↓
+Route
+   ↓
+Controller
+   ↓
+Request / Validation
+   ↓
+Model
+   ↓
+Database
+   ↓
+Controller
+   ↓
+View
+   ↓
+Browser
+```
+
+
 # Конспект: Структура проекта Laravel (Blade)
 
 
