@@ -2,7 +2,170 @@
 
 ![Profile](pic/profile.png)
 
+# Query Builder и Eloquent — конспект
 
+## Кратко
+
+- Оба инструмента работают поверх PDO.
+- **Query Builder** — удобный конструктор SQL-запросов (возвращает `stdClass`).
+- **Eloquent** — ORM (Active Record): модели как объекты, связи, события и поведение.
+
+---
+
+## Query Builder
+
+### Назначение
+
+- Формирование SQL без ручного написания строки.
+- Подходит для отчётов, агрегатов, массовых операций, когда модель не нужна.
+
+### Основной синтаксис
+
+```php
+use Illuminate\Support\Facades\DB;
+
+$rows = DB::table('posts')
+    ->select('id', 'title')
+    ->where('status', 'published')
+    ->orderBy('created_at', 'desc')
+    ->limit(10)
+    ->get(); // Collection of stdClass
+```
+
+### Частые операции
+
+- Выборка: `get()`, `first()`, `pluck()`
+- Условия: `where()`, `orWhere()`, `whereIn()`, `whereNull()`
+- JOIN: `join()`, `leftJoin()`
+- Агрегаты: `count()`, `sum()`, `avg()`, `max()`
+- Изменения: `insert()`, `insertGetId()`, `update()`, `delete()`
+- Транзакции: `DB::transaction(...)`
+- Обработка больших наборов: `chunk()`
+
+#### Пример (join + агрегат)
+
+```php
+$totals = DB::table('orders')
+    ->join('users', 'orders.user_id', '=', 'users.id')
+    ->select('users.id', DB::raw('SUM(orders.total) as total_spent'))
+    ->groupBy('users.id')
+    ->having('total_spent', '>', 1000)
+    ->get();
+```
+
+---
+
+## Eloquent (ORM)
+
+### Назначение
+
+- Таблицы представлены как классы-модели.
+- Удобен для CRUD, связей, бизнес-логики.
+
+### Пример модели
+
+```php
+class Post extends Model
+{
+    protected $fillable = ['title', 'body', 'user_id'];
+    protected $casts = ['published_at' => 'datetime'];
+}
+```
+
+### CRUD
+
+```php
+// Создание
+$post = Post::create([...]);
+
+// Поиск
+$post = Post::find(1);
+
+// Обновление
+$post->update(['title' => 'Новый']);
+
+// Удаление
+$post->delete();
+```
+
+### Связи и eager loading
+
+- Методы: `hasOne`, `hasMany`, `belongsTo`, `belongsToMany`, `morphMany` и др.
+- Eager loading:
+
+    ```php
+    $posts = Post::with('user')->get(); // Один запрос вместо N+1
+    ```
+
+#### Пример (связь + scope)
+
+```php
+$posts = Post::with('user')
+    ->published() // custom scope
+    ->latest()
+    ->get();
+
+foreach ($posts as $post) {
+    echo $post->user->name;
+}
+```
+
+### Scope, аксессоры/мутаторы, события
+
+- **Scope**:
+
+    ```php
+    public function scopePublished($q) {
+        return $q->where('status', 'published');
+    }
+    ```
+
+- **Аксессор/мутатор** — через `getFooAttribute`, `setFooAttribute`
+- **События**: `creating`, `created`, `updating`, `deleting` и др.
+- **Soft Deletes**: trait `SoftDeletes`, поля `deleted_at`, методы `withTrashed()`, `onlyTrashed()`, `restore()`
+
+---
+
+## Ключевые различия
+
+| Критерий         | Query Builder               | Eloquent                  |
+|------------------|----------------------------|---------------------------|
+| Возвращает       | `stdClass`                 | Экземпляры модели         |
+| Связи            | Через JOIN                  | Методы связей (ORM)       |
+| Накладные расходы| Меньше                     | Больше (гидратация объектов) |
+| Поведение        | Нет                        | Есть (мутаторы, события, traits) |
+| Eager loading    | Нет                        | Да (with())               |
+| Подходит для     | Агрегаты, отчёты            | CRUD, бизнес-логика, связи |
+| Когда использовать | Сложные запросы, массовые операции | Обычные CRUD, связи, объекты |
+
+---
+
+## Когда что использовать
+
+### Query Builder
+
+- Сложные агрегаты, отчёты (`GROUP BY`, `HAVING`)
+- Массовые обновления/удаления без загрузки моделей
+- Высокопроизводительные операции с минимальным потреблением памяти
+
+### Eloquent
+
+- Обычные CRUD для сущностей (Posts, Users, Orders)
+- Когда нужны связи, валидация, события, аксессоры/мутаторы
+- Когда удобнее работать с объектами и их поведением
+
+> Часто используют комбинированно: Eloquent для основной логики, Query Builder — для специфичных запросов.
+
+---
+
+## Практические советы
+
+- Всегда профилируйте: Eloquent удобен, но может создавать N+1 запросов — используйте `with()` или `withCount()`.
+- Для массовых обновлений/удалений используйте `DB::table(...)->update()` — не загружайте тысячи объектов.
+- Используйте `select()` для выбора только нужных полей (в Query Builder и Eloquent).
+- В миграциях и тяжёлых запросах оптимизируйте индексы — они важнее микрооптимизаций ORM.
+
+---
 
 # CRUD категорий в Laravel
 

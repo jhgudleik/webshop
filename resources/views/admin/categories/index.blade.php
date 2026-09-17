@@ -28,7 +28,7 @@
                         <th>Slug</th>
                         <th>Родитель</th>
                         <th>Статус</th>
-                        <th width="220">Действия</th>
+                        <th width="300">Действия</th>
                     </tr>
                     </thead>
 
