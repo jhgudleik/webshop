@@ -14,7 +14,31 @@ Route::prefix('admin')
         Route::resource('categories', CategoryController::class);
     });
 
-Route::get('profile', [ProfileController::class, 'profile'])->name('profile');
-Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
+
+/*
+|--------------------------------------------------------------------------
+| Профиль пользователя
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('auth')->group(function () {
+
+    // Страница профиля
+    Route::get('profile', [ProfileController::class, 'profile'])
+        ->name('profile');
+
+    // Обновление имени, email и аватара
+    Route::patch('profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
+
+    // Смена пароля
+    Route::put('profile/password', [ProfileController::class, 'updatePassword'])
+        ->name('profile.password');
+
+    // Удаление аватара
+    Route::delete('profile/avatar', [ProfileController::class, 'deleteAvatar'])
+        ->name('profile.avatar.delete');
+});
+
 
 Auth::routes();

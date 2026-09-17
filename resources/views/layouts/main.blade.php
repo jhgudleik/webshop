@@ -67,6 +67,32 @@
             border-color: #c73652;
             transform: translateY(-2px);
         }
+
+        /* Аватар пользователя */
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: #ffffff;
+            color: #fff;
+        }
+
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .avatar-circle.avatar-lg {
+            width: 60px;
+            height: 60px;
+        }
+
         .dropdown-menu {
             border-radius: 10px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
