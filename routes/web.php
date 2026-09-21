@@ -13,7 +13,7 @@ Route::prefix('admin')
     ->name('admin.')
     ->group(function () {
         Route::resource('categories', CategoryController::class);
-        Route::crud('users', UserCrudController::class);
+        Route::resource('users', UserCrudController::class)->names('users');
     });
 
 

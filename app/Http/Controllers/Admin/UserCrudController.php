@@ -2,136 +2,83 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Illuminate\View\View;
 
-class UserCrudController extends CrudController
+class UserCrudController extends Controller
 {
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-
-    public function setup(): void
+    public function index(): View
     {
-        $this->crud->setModel(User::class);
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/users');
-        $this->crud->setEntityNameStrings('пользователь', 'пользователи');
+        $users = User::query()
+            ->orderBy('id')
+            ->paginate(20);
+
+        return view('admin.users.index', compact('users'));
     }
 
-    protected function setupListOperation(): void
+    public function create(): View
     {
-        $this->crud->addColumn([
-            'name'  => 'id',
-            'label' => 'ID',
-            'type'  => 'number',
-        ]);
-
-        $this->crud->addColumn([
-            'name'  => 'name',
-            'label' => 'Имя',
-            'type'  => 'text',
-        ]);
-
-        $this->crud->addColumn([
-            'name'  => 'email',
-            'label' => 'Email',
-            'type'  => 'email',
-        ]);
-
-        $this->crud->addColumn([
-            'name'  => 'created_at',
-            'label' => 'Создан',
-            'type'  => 'datetime',
-        ]);
+        return view('admin.users.create');
     }
 
-    protected function setupCreateOperation(): void
+    public function store(): RedirectResponse
     {
-        $this->crud->setValidation([
+        $validated = request()->validate([
             'name'     => 'required|string|max:255',
             'email'    => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        $this->crud->field('name')
-            ->type('text')
-            ->label('Имя')
-            ->required();
+        $validated['password'] = Hash::make($validated['password']);
 
-        $this->crud->field('email')
-            ->type('email')
-            ->label('Email')
-            ->required();
+        User::create($validated);
 
-        $this->crud->field('password')
-            ->type('password')
-            ->label('Пароль')
-            ->required()
-            ->hint('Минимум 6 символов');
-
-        $this->crud->field('password_confirmation')
-            ->type('password')
-            ->label('Подтвердите пароль')
-            ->required();
-
-        $this->crud->addField([
-            'name'   => 'avatar',
-            'type'   => 'upload',
-            'label'  => 'Аватар',
-            'upload' => true,
-            'disk'   => 'public',
-        ]);
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'Пользователь успешно создан.');
     }
 
-    protected function setupUpdateOperation(): void
+    public function show(User $user): View
     {
-        $userId = $this->crud->getCurrentEntryId() ?? $this->crud->entry->getKey();
+        return view('admin.users.show', compact('user'));
+    }
 
-        $this->crud->setValidation([
+    public function edit(User $user): View
+    {
+        return view('admin.users.edit', compact('user'));
+    }
+
+    public function update(User $user): RedirectResponse
+    {
+        $validated = request()->validate([
             'name'  => 'required|string|max:255',
-            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($userId)],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
         ]);
 
-        $this->crud->field('name')
-            ->type('text')
-            ->label('Имя')
-            ->required();
-
-        $this->crud->field('email')
-            ->type('email')
-            ->label('Email')
-            ->required();
-
-        $this->crud->field('password')
-            ->type('password')
-            ->label('Новый пароль')
-            ->hint('Оставьте пустым, чтобы не менять')
-            ->notRequired();
-
-        $this->crud->field('password_confirmation')
-            ->type('password')
-            ->label('Подтвердите пароль')
-            ->notRequired();
-
-        $this->crud->addField([
-            'name'   => 'avatar',
-            'type'   => 'upload',
-            'label'  => 'Аватар',
-            'upload' => true,
-            'disk'   => 'public',
-        ]);
-    }
-
-    public function update()
-    {
-        if (! request('password')) {
-            request()->request->remove('password');
-            request()->request->remove('password_confirmation');
+        if (request('password')) {
+            request()->validate([
+                'password' => 'required|string|min:6|confirmed',
+            ]);
+            $validated['password'] = Hash::make(request('password'));
         }
 
-        return parent::update();
+        $user->update($validated);
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'Пользователь успешно обновлён.');
+    }
+
+    public function destroy(User $user): RedirectResponse
+    {
+        $user->delete();
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'Пользователь успешно удалён.');
     }
 }

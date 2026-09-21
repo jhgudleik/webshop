@@ -232,5 +232,11 @@
         "asset_path": "https://cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.dataTables.min.css",
         "asset_disk_path": "basset/cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.dataTables.min.css",
         "asset_attributes": []
+    },
+    "https://www.gravatar.com/avatar/1af4a2aba65a130dab4e469e64f3f329569b89623cff926350984e7577b6a36b.jpg?s=80&d=blank&r=g": {
+        "asset_name": "https://www.gravatar.com/avatar/1af4a2aba65a130dab4e469e64f3f329569b89623cff926350984e7577b6a36b.jpg?s=80&d=blank&r=g",
+        "asset_path": "https://www.gravatar.com/avatar/1af4a2aba65a130dab4e469e64f3f329569b89623cff926350984e7577b6a36b.jpg?s=80&d=blank&r=g",
+        "asset_disk_path": "basset/www.gravatar.com/avatar/1af4a2aba65a130dab4e469e64f3f329569b89623cff926350984e7577b6a36b.jpg",
+        "asset_attributes": []
     }
 }
