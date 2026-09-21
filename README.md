@@ -1,3 +1,10 @@
+# Администрирование пользователей
+
+![Users](pic/users.png)
+
+![User](pic/user.png)
+
+
 # Обновления профиля
 
 ![Profile](pic/profile.png)
