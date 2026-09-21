@@ -25,10 +25,10 @@
         <form action="{{ backpack_url('products/'.$entry->getKey()) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            <input type="hidden" name="id" value="{{ $entry->getKey() }}">
 
             <div class="row">
                 <div class="col-md-8">
-
                     <div class="mb-3">
                         <label for="title" class="form-label">Название</label>
                         <input type="text"
@@ -138,7 +138,7 @@
                         @enderror
                         @if($entry->image)
                             <div class="mt-2">
-                                <img src="{{ asset('storage/' . $entry->image) }}"
+                                <img src="{{ asset(Storage::disk('public')->url($entry->image)) }}"
                                      alt="img"
                                      class="rounded"
                                      width="100"

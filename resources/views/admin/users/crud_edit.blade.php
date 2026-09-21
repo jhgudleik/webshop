@@ -26,6 +26,7 @@
                 <form action="{{ backpack_url('users/'.$entry->getKey()) }}" method="POST">
                     @csrf
                     @method('PUT')
+                    <input type="hidden" name="id" value="{{ $entry->getKey() }}">
 
                     @foreach($crud->fields() as $field)
                         <div class="mb-3">

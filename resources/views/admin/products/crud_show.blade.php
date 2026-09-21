@@ -84,7 +84,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Изображение</h5>
                         @if($entry->image)
-                            <img src="{{ asset('storage/' . $entry->image) }}"
+                            <img src="{{ asset(Storage::disk('public')->url($entry->image)) }}"
                                  alt="img"
                                  class="rounded mb-3"
                                  width="200"

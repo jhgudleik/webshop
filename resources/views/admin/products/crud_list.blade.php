@@ -55,7 +55,7 @@
                             </td>
                             <td>
                                 @if($entry->image)
-                                    <img src="{{ asset('storage/' . $entry->image) }}"
+                                    <img src="{{ asset(Storage::disk('public')->url($entry->image)) }}"
                                          alt="img"
                                          class="rounded"
                                          width="50"

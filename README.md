@@ -1,3 +1,6 @@
+# Администрирование продуктов
+
+![Products](pic/products.png)
 # Администрирование пользователей
 
 ![Users](pic/users.png)
