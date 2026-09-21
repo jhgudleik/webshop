@@ -431,7 +431,8 @@
                 <a href="#"><i class="fas fa-chevron-right me-1" style="font-size: 10px;"></i>Главная</a><br>
                 <a href="#"><i class="fas fa-chevron-right me-1" style="font-size: 10px;"></i>Каталог</a><br>
                 <a href="{{ url('admin/users') }}"><i class="fas fa-chevron-right me-1" style="font-size: 10px;"></i>Пользователи</a><br>
-                <a href="{{ url('admin/categories') }}"><i class="fas fa-chevron-right me-1" style="font-size: 10px;"></i>Категории</a>
+                <a href="{{ url('admin/categories') }}"><i class="fas fa-chevron-right me-1" style="font-size: 10px;"></i>Категории</a><br>
+                <a href="{{ url('admin/products') }}"><i class="fas fa-chevron-right me-1" style="font-size: 10px;"></i>Товары</a>
             </div>
 
             <!-- Категории -->

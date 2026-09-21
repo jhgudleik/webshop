@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserCrudController;
+use App\Http\Controllers\Admin\ProductCrudController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('', [HomeController::class, 'index'])->name('home');
@@ -14,6 +15,7 @@ Route::prefix('admin')
     ->group(function () {
         Route::resource('categories', CategoryController::class);
         Route::crud('users', UserCrudController::class);
+        Route::crud('products', ProductCrudController::class);
     });
 
 

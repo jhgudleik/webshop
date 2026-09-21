@@ -20,7 +20,9 @@
             </div>
         @endif
 
-        @php $entries = $crud->getEntries(); @endphp
+        @php
+            $entries = \App\Models\User::orderBy('id')->paginate(20);
+        @endphp
 
         @if($entries->count())
             <div class="table-responsive">
