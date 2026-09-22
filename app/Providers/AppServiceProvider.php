@@ -25,12 +25,10 @@ class AppServiceProvider extends ServiceProvider
                 ->whereNull('parent_id')
                 ->where('active', true)
                 ->with([
-                    'children' => function ($query) {
-                        $query
-                            ->where('active', true)
-                            ->orderBy('sort_order')
-                            ->orderBy('title');
-                    }
+                    'children' => function ($q) { $q->where('active', true)->orderBy('sort_order')->orderBy('title'); },
+                    'children.children' => function ($q) { $q->where('active', true)->orderBy('sort_order')->orderBy('title'); },
+                    'children.children.children' => function ($q) { $q->where('active', true)->orderBy('sort_order')->orderBy('title'); },
+                    'children.children.children.children' => function ($q) { $q->where('active', true)->orderBy('sort_order')->orderBy('title'); },
                 ])
                 ->orderBy('sort_order')
                 ->orderBy('title')

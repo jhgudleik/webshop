@@ -14,6 +14,7 @@ Route::prefix('admin')
     ->name('admin.')
     ->group(function () {
         Route::post('categories/move', [CategoryController::class, 'move'])->name('categories.move');
+        Route::get('categories_tree', [CategoryController::class, 'tree'])->name('categories.tree');
         Route::resource('categories', CategoryController::class);
         Route::crud('users', UserCrudController::class);
         Route::crud('products', ProductCrudController::class);

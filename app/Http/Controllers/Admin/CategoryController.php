@@ -16,6 +16,16 @@ class CategoryController extends Controller
 {
     public function index(): View
     {
+        $categories = Category::query()
+            ->with('parent')
+            ->orderBy('title')
+            ->paginate(20);
+
+        return view('admin.categories.index', compact('categories'));
+    }
+
+    public function tree(): View
+    {
         $parentCategories = Category::query()
             ->whereNull('parent_id')
             ->with('children')
@@ -23,7 +33,7 @@ class CategoryController extends Controller
             ->orderBy('title')
             ->get();
 
-        return view('admin.categories.index', compact('parentCategories'));
+        return view('admin.categories.tree', compact('parentCategories'));
     }
 
     public function create(): View

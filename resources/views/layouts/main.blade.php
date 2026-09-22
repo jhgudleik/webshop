@@ -132,6 +132,13 @@
             margin-top: -1px;
             border-radius: 10px;
         }
+        @media (max-width: 991.98px) {
+            .category-dropdown .dropdown-submenu .dropdown-menu {
+                left: 0;
+                margin-top: 0;
+                padding-left: 1rem;
+            }
+        }
         .footer-custom {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: rgba(255,255,255,0.8);
@@ -178,12 +185,6 @@
             margin-bottom: 2rem;
             border-radius: 0;
         }
-        @media (max-width: 991.98px) {
-            .category-dropdown .dropdown-submenu .dropdown-menu {
-                left: 0;
-                margin-top: 0;
-            }
-        }
     </style>
     @stack('styles')
 </head>
@@ -218,22 +219,12 @@
                             <i class="fas fa-th-list me-1"></i>Категории
                         </a>
                         <ul class="dropdown-menu">
-                            <!-- Электроника -->
                             @foreach($parentCategories as $parentCategory)
-                            <li class="dropdown-submenu">
-                                <a class="dropdown-item dropdown-toggle" href="#">
-                                   {{ $parentCategory->title }}
-                                </a>
-                                @if($parentCategory->children->isNotEmpty())
-                                <ul class="dropdown-menu">
-                                    @foreach($parentCategory->children as $subCategory)
-                                    <li><a class="dropdown-item" href="#">{{ $subCategory->title }}</a></li>
-                                    @endforeach
-                                </ul>
-                                @endif
-                            </li>
+                                @include('layouts.partials.nav-category', [
+                                    'category' => $parentCategory,
+                                    'hasChildren' => $parentCategory->children->where('active', true)->isNotEmpty()
+                                ])
                             @endforeach
-
                         </ul>
                     </li>
 
