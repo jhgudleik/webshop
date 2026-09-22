@@ -1,3 +1,12 @@
+
+#  Дерево категорий
+
+![Tree](pic/nav-tree.gif)
+
+# Администрирование категорий
+
+![Categories](pic/categories.png)
+
 # Администрирование продуктов
 
 ![Products](pic/products.png)

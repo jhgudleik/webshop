@@ -1,5 +1,6 @@
 <li class="{{ $hasChildren ? 'dropdown-submenu' : '' }}">
-    <a class="dropdown-item {{ $hasChildren ? 'dropdown-toggle' : '' }}" href="#">
+    <a class="dropdown-item {{ $hasChildren ? 'dropdown-toggle' : '' }}"
+       href="{{ route('products.by-category', $category->slug) }}">
         {{ $category->title }}
     </a>
     @if($hasChildren)

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
@@ -9,6 +10,9 @@ use App\Http\Controllers\Admin\ProductCrudController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('', [HomeController::class, 'index'])->name('home');
+
+Route::get('products', [ProductsController::class, 'index'])->name('products.index');
+Route::get('category/{category:slug}', [ProductsController::class, 'index'])->name('products.by-category');
 
 Route::prefix('admin')
     ->name('admin.')
