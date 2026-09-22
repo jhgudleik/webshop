@@ -15,20 +15,28 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        if (Schema::hasTable('categories')) {
+        View::composer('*', function ($view) {
+            if (!Schema::hasTable('categories')) {
+                $view->with(['parentCategories' => collect()]);
+                return;
+            }
+
             $parentCategories = Category::query()
                 ->whereNull('parent_id')
                 ->where('active', true)
+                ->with([
+                    'children' => function ($query) {
+                        $query
+                            ->where('active', true)
+                            ->orderBy('sort_order')
+                            ->orderBy('title');
+                    }
+                ])
+                ->orderBy('sort_order')
+                ->orderBy('title')
                 ->get();
-        }else{
-            $parentCategories = [];
-        }
 
-
-        View::composer('*', function ($view) use ($parentCategories) {
-            $view->with([
-                'parentCategories' => $parentCategories
-            ]);
+            $view->with(['parentCategories' => $parentCategories]);
         });
     }
 }

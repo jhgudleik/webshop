@@ -185,6 +185,7 @@
             }
         }
     </style>
+    @stack('styles')
 </head>
 <body>
 <!-- ШАПКА -->
