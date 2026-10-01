@@ -1,3 +1,17 @@
+# Администрирование товаров по API
+
+![New_Product](pic/novyi-tovar_view.png)
+
+![New_Product_Postmen](pic/novyi-tovar.png)
+
+
+# Администрирование категорий по API
+
+![New_Category](pic/novaya-kategoriya_view.png)
+
+![New_Category_Postmen](pic/novaya-kategoriya.png)
+
+
 
 #  Дерево категорий
 

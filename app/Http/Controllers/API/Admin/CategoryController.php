@@ -3,47 +3,49 @@
 namespace App\Http\Controllers\API\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Admin\StoreCategoryRequest;
+use App\Http\Requests\Admin\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 
 class CategoryController extends Controller
-
 {
-
     public function index(): JsonResponse
-
     {
-
         return response()->json(Category::query()->paginate(10));
-
     }
 
     public function show(Category $category): JsonResponse
-
     {
-
         return response()->json($category);
-
     }
 
-    public function store(Request $request): JsonResponse
-
+    public function store(StoreCategoryRequest $request): JsonResponse
     {
+        $category = Category::create($request->validated());
 
+        return response()->json([
+            'message' => 'Категория создана.',
+            'data'    => $category,
+        ], 201);
     }
 
-    public function update(Request $request, Category $category): JsonResponse
-
+    public function update(UpdateCategoryRequest $request, Category $category): JsonResponse
     {
+        $category->update($request->validated());
 
+        return response()->json([
+            'message' => 'Категория обновлена.',
+            'data'    => $category,
+        ]);
     }
 
     public function destroy(Category $category): JsonResponse
-
     {
+        $category->delete();
 
+        return response()->json([
+            'message' => 'Категория удалена.',
+        ]);
     }
-
 }
-
