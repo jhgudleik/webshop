@@ -13,8 +13,10 @@
         "backpack/crud": "^7.1",
         "backpack/theme-tabler": "^2.1",
         "laravel/framework": "^13.17",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0",
-        "laravel/ui": "^4.6"
+        "laravel/ui": "^4.6",
+        "tymon/jwt-auth": "^2.3"
     },
     "require-dev": {
         "backpack/generators": "^4.1",

@@ -238,5 +238,95 @@
         "asset_path": "https://www.gravatar.com/avatar/1af4a2aba65a130dab4e469e64f3f329569b89623cff926350984e7577b6a36b.jpg?s=80&d=blank&r=g",
         "asset_disk_path": "basset/www.gravatar.com/avatar/1af4a2aba65a130dab4e469e64f3f329569b89623cff926350984e7577b6a36b.jpg",
         "asset_attributes": []
+    },
+    "https://cdn.jsdelivr.net/npm/summernote@0.9.1/dist/summernote-lite.min.css": {
+        "asset_name": "https://cdn.jsdelivr.net/npm/summernote@0.9.1/dist/summernote-lite.min.css",
+        "asset_path": "https://cdn.jsdelivr.net/npm/summernote@0.9.1/dist/summernote-lite.min.css",
+        "asset_disk_path": "basset/cdn.jsdelivr.net/npm/summernote@0.9.1/dist/summernote-lite.min.css",
+        "asset_attributes": []
+    },
+    "https://cdn.jsdelivr.net/npm/summernote@0.9.1/dist/font/summernote.woff2": {
+        "asset_name": "https://cdn.jsdelivr.net/npm/summernote@0.9.1/dist/font/summernote.woff2",
+        "asset_path": "https://cdn.jsdelivr.net/npm/summernote@0.9.1/dist/font/summernote.woff2",
+        "asset_disk_path": "basset/cdn.jsdelivr.net/npm/summernote@0.9.1/dist/font/summernote.woff2",
+        "asset_attributes": []
+    },
+    "https://cdn.jsdelivr.net/npm/summernote@0.9.1/dist/summernote-lite.min.js": {
+        "asset_name": "https://cdn.jsdelivr.net/npm/summernote@0.9.1/dist/summernote-lite.min.js",
+        "asset_path": "https://cdn.jsdelivr.net/npm/summernote@0.9.1/dist/summernote-lite.min.js",
+        "asset_disk_path": "basset/cdn.jsdelivr.net/npm/summernote@0.9.1/dist/summernote-lite.min.js",
+        "asset_attributes": []
+    },
+    "https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js": {
+        "asset_name": "https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js",
+        "asset_path": "https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js",
+        "asset_disk_path": "basset/cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js",
+        "asset_attributes": []
+    },
+    "https://cdn.datatables.net/buttons/3.2.0/js/buttons.bootstrap5.min.js": {
+        "asset_name": "https://cdn.datatables.net/buttons/3.2.0/js/buttons.bootstrap5.min.js",
+        "asset_path": "https://cdn.datatables.net/buttons/3.2.0/js/buttons.bootstrap5.min.js",
+        "asset_disk_path": "basset/cdn.datatables.net/buttons/3.2.0/js/buttons.bootstrap5.min.js",
+        "asset_attributes": []
+    },
+    "https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js": {
+        "asset_name": "https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js",
+        "asset_path": "https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js",
+        "asset_disk_path": "basset/cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js",
+        "asset_attributes": []
+    },
+    "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.18/pdfmake.min.js": {
+        "asset_name": "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.18/pdfmake.min.js",
+        "asset_path": "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.18/pdfmake.min.js",
+        "asset_disk_path": "basset/cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.18/pdfmake.min.js",
+        "asset_attributes": []
+    },
+    "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.18/vfs_fonts.js": {
+        "asset_name": "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.18/vfs_fonts.js",
+        "asset_path": "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.18/vfs_fonts.js",
+        "asset_disk_path": "basset/cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.18/vfs_fonts.js",
+        "asset_attributes": []
+    },
+    "https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js": {
+        "asset_name": "https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js",
+        "asset_path": "https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js",
+        "asset_disk_path": "basset/cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js",
+        "asset_attributes": []
+    },
+    "https://cdn.datatables.net/buttons/3.2.0/js/buttons.print.min.js": {
+        "asset_name": "https://cdn.datatables.net/buttons/3.2.0/js/buttons.print.min.js",
+        "asset_path": "https://cdn.datatables.net/buttons/3.2.0/js/buttons.print.min.js",
+        "asset_disk_path": "basset/cdn.datatables.net/buttons/3.2.0/js/buttons.print.min.js",
+        "asset_attributes": []
+    },
+    "https://cdn.datatables.net/buttons/3.2.0/js/buttons.colVis.min.js": {
+        "asset_name": "https://cdn.datatables.net/buttons/3.2.0/js/buttons.colVis.min.js",
+        "asset_path": "https://cdn.datatables.net/buttons/3.2.0/js/buttons.colVis.min.js",
+        "asset_disk_path": "basset/cdn.datatables.net/buttons/3.2.0/js/buttons.colVis.min.js",
+        "asset_attributes": []
+    },
+    "https://cdn.datatables.net/buttons/3.2.0/css/buttons.bootstrap5.min.css": {
+        "asset_name": "https://cdn.datatables.net/buttons/3.2.0/css/buttons.bootstrap5.min.css",
+        "asset_path": "https://cdn.datatables.net/buttons/3.2.0/css/buttons.bootstrap5.min.css",
+        "asset_disk_path": "basset/cdn.datatables.net/buttons/3.2.0/css/buttons.bootstrap5.min.css",
+        "asset_attributes": []
+    },
+    "https://cdn.jsdelivr.net/npm/urijs@1.19.11/src/URI.min.js": {
+        "asset_name": "https://cdn.jsdelivr.net/npm/urijs@1.19.11/src/URI.min.js",
+        "asset_path": "https://cdn.jsdelivr.net/npm/urijs@1.19.11/src/URI.min.js",
+        "asset_disk_path": "basset/cdn.jsdelivr.net/npm/urijs@1.19.11/src/URI.min.js",
+        "asset_attributes": []
+    },
+    "https://cdn.jsdelivr.net/npm/jquery-ui@1.13.2/dist/jquery-ui.min.js": {
+        "asset_name": "https://cdn.jsdelivr.net/npm/jquery-ui@1.13.2/dist/jquery-ui.min.js",
+        "asset_path": "https://cdn.jsdelivr.net/npm/jquery-ui@1.13.2/dist/jquery-ui.min.js",
+        "asset_disk_path": "basset/cdn.jsdelivr.net/npm/jquery-ui@1.13.2/dist/jquery-ui.min.js",
+        "asset_attributes": []
+    },
+    "F:\\webshop\\vendor/backpack/crud/src/resources/assets/libs/jquery.mjs.nestedSortable2.js": {
+        "asset_name": "F:\\webshop\\vendor/backpack/crud/src/resources/assets/libs/jquery.mjs.nestedSortable2.js",
+        "asset_path": "F:\\webshop\\vendor/backpack/crud/src/resources/assets/libs/jquery.mjs.nestedSortable2.js",
+        "asset_disk_path": "basset/vendor/backpack/crud/src/resources/assets/libs/jquery.mjs.nestedSortable2.js",
+        "asset_attributes": []
     }
 }

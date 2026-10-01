@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\WEB\Admin;
 
 use App\Models\User;
-use Illuminate\Validation\Rule;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Illuminate\Validation\Rule;
 
 class UserCrudController extends CrudController
 {

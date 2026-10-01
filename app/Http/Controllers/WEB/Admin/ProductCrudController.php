@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\WEB\Admin;
 
-use App\Models\Product;
 use App\Models\Category;
-use Illuminate\Validation\Rule;
+use App\Models\Product;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Illuminate\Validation\Rule;
 
 class ProductCrudController extends CrudController
 {

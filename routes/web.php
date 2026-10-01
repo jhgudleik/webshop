@@ -1,13 +1,12 @@
 <?php
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProductsController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WEB\Admin\CategoryController;
+use App\Http\Controllers\WEB\Admin\ProductCrudController;
+use App\Http\Controllers\WEB\Admin\UserCrudController;
+use App\Http\Controllers\WEB\HomeController;
+use App\Http\Controllers\WEB\ProductsController;
+use App\Http\Controllers\WEB\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\UserCrudController;
-use App\Http\Controllers\Admin\ProductCrudController;
-use Illuminate\Support\Facades\Auth;
 
 Route::get('', [HomeController::class, 'index'])->name('home');
 
@@ -51,4 +50,15 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Auth::routes();
+// Auth routes (WEB namespace)
+Route::namespace('App\Http\Controllers\WEB')->group(function () {
+    Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+    Route::post('login', 'Auth\LoginController@login');
+    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+    Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+    Route::post('register', 'Auth\RegisterController@register');
+    Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+    Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+    Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
+});
